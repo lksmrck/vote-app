@@ -4,7 +4,7 @@ import Footer from "./Footer";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <div>
+    <div className="px-10">
       <Navbar />
       {children}
       <Footer />
