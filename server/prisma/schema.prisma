@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -------------------------------------------------- //
+
+enum VoteState {
+  COMPLETED
+  ACTIVE
+  CANCELLED
+}
+
+model Vote {
+  id String @id @unique
+  createdAt DateTime @default(now())
+  name String @db.VarChar(255)
+  state VoteState
+  views Int
+
+  options Option[]
+
+  creatorId String @unique
+  creator User @relation("votesCreated", fields: [creatorId], references: [id]) 
+
+  votedBy UserVote[] 
+}
+
+
+
+model Option {
+  id String @id @unique
+  name String
+  count Int
+
+  voters UserOption[]
+
+  voteId String @unique
+  vote Vote @relation(fields: [voteId], references: [id])
+
+  creatorId String
+  creator User @relation(fields: [creatorId], references: [id])
+}
+
+model User {
+  id String @id @unique
+  email String @unique
+  name String
+  votesCreated Vote[] @relation("votesCreated")
+  votesVoted UserVote[] 
+
+  optionsVoted UserOption[] 
+  optionsCreated Option[]
+
+}
+
+// relation tables (m-t-m)
+model UserOption {
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  optionId String 
+  option Option @relation(fields: [optionId], references: [id])
+
+  @@id([userId, optionId])
+}
+
+model UserVote {
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  voteId String 
+  vote Vote @relation(fields: [voteId], references: [id])
+
+  @@id([userId, voteId])
+}
+
+
