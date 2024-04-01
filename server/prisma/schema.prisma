@@ -15,6 +15,7 @@ datasource db {
 
 // -------------------------------------------------- //
 
+
 enum VoteState {
   COMPLETED
   ACTIVE
@@ -22,24 +23,22 @@ enum VoteState {
 }
 
 model Vote {
-  id String @id @unique
+  id String @id @unique @default(uuid())
   createdAt DateTime @default(now())
   name String @db.VarChar(255)
   state VoteState
-  views Int
+  views Int? @default(0)
 
   options Option[]
 
-  creatorId String @unique
+  creatorId String 
   creator User @relation("votesCreated", fields: [creatorId], references: [id]) 
 
   votedBy UserVote[] 
 }
 
-
-
 model Option {
-  id String @id @unique
+  id String @id @unique @default(uuid())
   name String
   count Int
 
@@ -53,9 +52,11 @@ model Option {
 }
 
 model User {
-  id String @id @unique
+  id String @id @unique @default(uuid())
   email String @unique
   name String
+  password String
+
   votesCreated Vote[] @relation("votesCreated")
   votesVoted UserVote[] 
 

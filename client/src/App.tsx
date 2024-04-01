@@ -8,8 +8,8 @@ const App = () => {
   return (
     <div className="h-screen w-screen bg-b2 font-bowlby text-white ">
       <Layout>
-        <MainPage />
-        {/* <CreateVote /> */}
+        {/* <MainPage /> */}
+        <CreateVote />
       </Layout>
     </div>
   );
