@@ -4,8 +4,8 @@ import { ApiResponse } from "../models/apiResponse";
 const create = (
   isSuccess: boolean,
   statusCode: StatusCodes,
-  data = null,
-  errorMessage = null
+  data = {},
+  errorMessage = ""
 ): ApiResponse => ({ isSuccess, statusCode, data, errorMessage });
 
 export const response = {

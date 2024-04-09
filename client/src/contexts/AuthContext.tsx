@@ -1,5 +1,5 @@
 import { getLocalStorage, getSessionStorage } from "../utils/getStorage";
-// import { UserInLS } from "../models/UserInLS";
+
 // import { router } from "../routes";
 import agent from "../api/agent";
 import {
@@ -12,14 +12,13 @@ import {
   FC,
   useContext,
 } from "react";
-import { useNavigate } from "react-router";
+import { UserInLS } from "../models/user";
+// import { useNavigate } from "react-router";
 
 interface AuthContextInterface {
-  //   currentUser: UserInLS | null;
-  currentUser: any;
-  //   setCurrentUser: Dispatch<SetStateAction<UserInLS | null>>;
-  setCurrentUser: Dispatch<SetStateAction<any | null>>;
-  //   loginUser: (user: any) => void;
+  currentUser: UserInLS | null;
+  setCurrentUser: Dispatch<SetStateAction<UserInLS | null>>;
+  getUser: () => Promise<void>;
   logoutUser: () => void;
   isLoading: boolean;
 }
@@ -29,30 +28,45 @@ const AuthContext = createContext({} as AuthContextInterface);
 export const AuthContextProvider: FC<{
   children: ReactNode;
 }> = ({ children }) => {
-  //Stored data for user and company
   const [currentUser, setCurrentUser] = useState(
-    // getSessionStorage("user") || null
     getLocalStorage("user") || null,
   );
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const logoutUser = () => {
     setCurrentUser(null);
-    navigate("/");
+    // navigate("/");
+  };
+
+  const getUser = async () => {
+    const user = await agent.Auth.getUser();
+    setCurrentUser({
+      displayName: user?.displayName,
+      photoUrl: user.photos[0]?.value,
+      id: user.id,
+      email: user.emails[0]?.value,
+    });
   };
 
   useEffect(() => {
-    // sessionStorage.setItem("user", JSON.stringify(currentUser));
     localStorage.setItem("user", JSON.stringify(currentUser));
   }, [currentUser]);
+
+  // init
+  useEffect(() => {
+    if (currentUser == null) {
+      console.log("User refetch");
+      getUser();
+    }
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         currentUser,
         setCurrentUser,
-        // loginUser,
+        getUser,
         logoutUser,
         isLoading,
       }}

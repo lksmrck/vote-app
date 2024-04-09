@@ -40,11 +40,11 @@ model Vote {
 model Option {
   id String @id @unique @default(uuid())
   name String
-  count Int
+  count Int @default(0)
 
   voters UserOption[]
 
-  voteId String @unique
+  voteId String 
   vote Vote @relation(fields: [voteId], references: [id])
 
   creatorId String
@@ -55,7 +55,6 @@ model User {
   id String @id @unique @default(uuid())
   email String @unique
   name String
-  password String
 
   votesCreated Vote[] @relation("votesCreated")
   votesVoted UserVote[] 
