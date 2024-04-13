@@ -1,6 +1,9 @@
 import { Box, Container, Grid, Heading } from "@radix-ui/themes";
-import React from "react";
-import VoteCard from "../components/VoteCard";
+import React, { useEffect } from "react";
+import VoteCard from "../components/voteList/VoteCard";
+import useAuthContext from "../contexts/AuthContext";
+import agent from "../api/agent";
+import VoteList from "../components/voteList/VoteList";
 
 const DUMMY_ITEMS = [
   {
@@ -31,19 +34,13 @@ const MainPage = () => {
   return (
     <div>
       <Heading>My votes</Heading>
-      <Box>
-        <Grid columns="5" gap="3" rows="repeat(2, 128px)" width="auto">
-          {DUMMY_ITEMS.map((item, index: number) => (
-            <VoteCard data={{ ...item, index }} />
-          ))}
-        </Grid>
-      </Box>
+      <VoteList />
       <Heading>Votes your were invited to</Heading>
-      <Grid columns="5" gap="3" rows="repeat(2, 128px)" width="auto">
+      {/* <Grid columns="5" gap="3" rows="repeat(2, 128px)" width="auto">
         {DUMMY_ITEMS.map((item, index: number) => (
           <VoteCard data={{ ...item, index }} />
         ))}
-      </Grid>
+      </Grid> */}
     </div>
   );
 };

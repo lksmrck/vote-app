@@ -18,8 +18,8 @@ const requests = {
 };
 
 const Auth = {
-  getUser: () =>
-    requests
+  getUser: () => {
+    return requests
       .get("/auth/google/login/success", {
         headers: {
           "Access-Control-Allow-Credentials": true,
@@ -27,7 +27,8 @@ const Auth = {
       })
       .then((res: any) => {
         if (res.data.data) return res.data.data.user;
-      }),
+      });
+  },
 };
 
 const Votes = {
@@ -37,8 +38,11 @@ const Votes = {
     });
   },
   getVotesForUser: async (id: number) => {
-    requests.get(`/votes/${id}`).then((res) => {
-      console.log(res);
+    return requests.get(`/votes/${id}`).then((res: AxiosResponse) => {
+      if (res.data.data) {
+        console.log(res.data.data);
+        return res.data.data;
+      }
     });
   },
 };

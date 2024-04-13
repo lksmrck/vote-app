@@ -1,6 +1,6 @@
 import express from "express";
-import { VOTES } from "../controllers/voteController";
-import { AUTH } from "../controllers/authController";
+import { VOTES } from "../controllers/http/voteController";
+import { AUTH } from "../controllers/http/authController";
 import passport from "passport";
 
 const router = express.Router();

@@ -1,9 +1,9 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { PrismaClient, User } from "@prisma/client";
-import { response } from "../utils/response";
-import { VoteCreateSchema } from "../validation/schema";
-import { catchAsync } from "../middlewares/catchAsync";
+import { response } from "../../utils/response";
+import { VoteCreateSchema } from "../../validation/schema";
+import { catchAsync } from "../../middlewares/catchAsync";
 
 const prisma = new PrismaClient().$extends({
   query: {

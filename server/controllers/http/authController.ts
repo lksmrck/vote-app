@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { response } from "../utils/response";
-import { catchAsync } from "../middlewares/catchAsync";
+import { response } from "../../utils/response";
+import { catchAsync } from "../../middlewares/catchAsync";
 import passport from "passport";
 
 // const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -34,7 +34,12 @@ const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {
     res
       .status(StatusCodes.UNAUTHORIZED)
       .json(
-        response.create(false, StatusCodes.UNAUTHORIZED, {}, "Log in failure")
+        response.create(
+          false,
+          StatusCodes.UNAUTHORIZED,
+          {},
+          "User session expired. Log in again."
+        )
       );
   }
 });
